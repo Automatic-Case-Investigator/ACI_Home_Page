@@ -1,4 +1,5 @@
-import { Button, Container, Flex, Text, HStack, Spacer } from "@chakra-ui/react";
+import { Button, Flex, HStack, Spacer, Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom"
 
 export const Navbar = () => {
     return (
@@ -16,14 +17,15 @@ export const Navbar = () => {
                 backdropFilter="blur(8px)"
                 zIndex={999}>
 
-                <Text fontWeight="bold" fontSize="lg">
-                    ACI
-                </Text>
+                <Link href="/">
+                    <RouterLink to="/"><img src="/assets/icons/ACI_small.svg" alt="icon" width={30}/></RouterLink>
+                </Link>
 
                 <Spacer />
 
                 <HStack display={{ base: "none", md: "flex" }}>
-                    <Button variant="ghost">Details</Button>
+                    <RouterLink to="/documents/get_started"><Button variant="ghost">Get Started</Button></RouterLink>
+                    <RouterLink to="/documents"><Button variant="ghost">Details</Button></RouterLink>
                 </HStack>
             </Flex>
         </>

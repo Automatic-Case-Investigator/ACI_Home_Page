@@ -1,6 +1,6 @@
 import { Box, Heading, Text } from "@chakra-ui/react"
-import { Hero } from "../components/home/Hero"
-import { Navbar } from "../components/ui/Navbar"
+import { Hero } from "@/components/home/Hero"
+import { Navbar } from "@/components/ui/Navbar"
 
 export const Home = () => {
     return (

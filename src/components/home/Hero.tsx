@@ -12,7 +12,7 @@ export const Hero = () => {
                     <Text>Built by <Link href="https://acezxn.me">acezxn</Link> with <Icon color="red.500"><HiHeart /></Icon></Text>
                 </Box>
                 <Box flex={1} m={2} h="50%" bgColor="blue.800">
-                    <Heading>SVG here</Heading>
+                    <img src="/assets/images/cases.png" alt="cases" />
                 </Box>
             </Box>
         </>

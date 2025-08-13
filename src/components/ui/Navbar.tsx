@@ -1,5 +1,6 @@
-import { Button, Flex, HStack, Spacer, Link } from "@chakra-ui/react";
+import { Button, Flex, HStack, Spacer, Link, IconButton } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom"
+import { RxHamburgerMenu } from "react-icons/rx";
 
 export const Navbar = () => {
     return (
@@ -24,9 +25,17 @@ export const Navbar = () => {
                 <Spacer />
 
                 <HStack display={{ base: "none", md: "flex" }}>
-                    <RouterLink to="/documents/get_started"><Button variant="ghost">Get Started</Button></RouterLink>
-                    <RouterLink to="/documents"><Button variant="ghost">Details</Button></RouterLink>
+                    <RouterLink to="/documents/get_started"><Button variant="ghost" colorScheme="blue">Get Started</Button></RouterLink>
+                    <RouterLink to="/documents"><Button variant="ghost" >Details</Button></RouterLink>
                 </HStack>
+
+                <IconButton
+                    aria-label="Open Menu"
+                    display={{ base: "flex", md: "none" }}
+                    variant="ghost"
+                    colorScheme="blue">
+                    <RxHamburgerMenu />
+                </IconButton>
             </Flex>
         </>
     );

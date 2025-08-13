@@ -75,9 +75,12 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             .catch((err) => console.error(err));
     }, []);
 
-    return <Box m={8} ml={24} mr={24}>
-        <Markdown components={components as Components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-            {blogContent}
-        </Markdown>
-    </Box>
+    return (
+        <Box mx={{ base: 4, md: 24 }} my={8}>
+            <Markdown components={components as Components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {blogContent}
+            </Markdown>
+        </Box>
+    );
+
 };

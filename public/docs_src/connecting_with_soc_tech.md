@@ -4,9 +4,9 @@ This is a tutorial of connecting SIEMs and SOARs to the main backend.
 
 ## Supported Platforms
 
-**SOAR:** The Hive
+**SOAR:** [The Hive](https://strangebee.com/)
 
-**SIEM:** Wazuh
+**SIEM:** [Wazuh](https://wazuh.com/)
 
 ## Login to the server
 

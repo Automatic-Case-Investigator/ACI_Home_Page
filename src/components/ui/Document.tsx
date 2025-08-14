@@ -1,58 +1,133 @@
+
+import { Box, Heading, Link, Separator, Text, Table, List } from "@chakra-ui/react";
+import { Highlight, themes } from "prism-react-renderer"
 import Markdown, { Components } from "react-markdown";
+import { useEffect, useState } from "react";
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
-import { useEffect, useState } from "react";
-import { Box, Heading, Link, Separator, Text, Code, Table, List } from "@chakra-ui/react";
 
 export const Document = ({ documentPath }: { documentPath: string }) => {
     const [blogContent, setBlogContent] = useState<string>("");
 
     const components = {
         h1: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="3xl" fontWeight="bold" mt={8} mb={8}>{children}</Heading>
+            <Heading fontSize="3xl" fontWeight="bold" mt={8} mb={8}>
+                {children}
+            </Heading>
         ),
         h2: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="2xl" fontWeight="bold" mt={6} mb={6}>{children}</Heading>
+            <Heading fontSize="2xl" fontWeight="bold" mt={6} mb={6}>
+                {children}
+            </Heading>
         ),
         h3: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="xl" fontWeight="bold" mt={4} mb={4}>{children}</Heading>
+            <Heading fontSize="xl" fontWeight="bold" mt={4} mb={4}>
+                {children}
+            </Heading>
         ),
         h4: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="large" fontWeight="bold" mt={2} mb={2}>{children}</Heading>
+            <Heading fontSize="large" fontWeight="bold" mt={2} mb={2}>
+                {children}
+            </Heading>
         ),
         h5: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="medium" fontWeight="bold" mt={1} mb={1}>{children}</Heading>
+            <Heading fontSize="medium" fontWeight="bold" mt={1} mb={1}>
+                {children}
+            </Heading>
         ),
         p: ({ children }: { children: React.ReactNode }) => (
-            <Text mt={1} mb={2}>{children}</Text>
+            <Text mt={1} mb={2}>
+                {children}
+            </Text>
         ),
         a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
-            <Link href={href} color="blue.500">{children}</Link>
+            <Link href={href} target="_blank" color="blue.500">
+                {children}
+            </Link>
         ),
         hr: () => <Separator mt={4} mb={4} />,
-        code: ({ className, children }: { className?: string; children: React.ReactNode }) => {
+
+        code: ({
+            className,
+            children,
+        }: {
+            className?: string;
+            children: React.ReactNode;
+        }) => {
             const language = className?.replace("language-", "") || "";
-            return <Code bg="gray.800" fontSize="0.9rem" mb={2} lang={language}>{children}</Code>;
+
+            if (language) {
+                return (
+                    <Highlight
+                        code={String(children).trim()}
+                        language={language as any}
+                        theme={themes.palenight}
+                    >
+                        {({ style, tokens, getLineProps, getTokenProps }) => (
+                            <Box
+                                as="pre"
+                                p={4}
+                                mb={4}
+                                borderRadius="md"
+                                overflowX="auto"
+                                bg="gray.800"
+                                color="white"
+                                style={style}
+                            >
+                                {tokens.map((line, i) => (
+                                    <div key={i} {...getLineProps({ line })}>
+                                        {line.map((token, key) => (
+                                            <span key={key} {...getTokenProps({ token })} />
+                                        ))}
+                                    </div>
+                                ))}
+                            </Box>
+                        )}
+                    </Highlight>
+                );
+            }
+
+            return (
+                <Highlight
+                    code={String(children).trim()}
+                    language={"text"}
+                    theme={themes.palenight}
+                >
+                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                        <pre style={{ ...style, display: "inline-block", borderRadius: 4, paddingLeft: 4, paddingRight: 4 }}>
+                            {tokens.map((line, i) => (
+                                <div key={i} {...getLineProps({ line })}>
+                                    {line.map((token, key) => (
+                                        <span key={key} {...getTokenProps({ token })} />
+                                    ))}
+                                </div>
+                            ))}
+                        </pre>
+                    )}
+                </Highlight>
+            );
         },
-        pre: ({ children }: { children: any }) => (
-            <Box as="pre" p={4} mb={4} bg="gray.800" color="white" borderRadius="md" overflowX="auto">
-                {children}
-            </Box>
-        ),
+
+        pre: ({ children }: { children: any }) => <>{children}</>,
+
         table: ({ children }: { children: React.ReactNode }) => (
-            <Table.Root mb={4}>
-                {children}
-            </Table.Root>
+            <Table.Root mb={4}>{children}</Table.Root>
         ),
         thead: ({ children }: { children: React.ReactNode }) => (
             <Table.Header bg="gray.100">{children}</Table.Header>
         ),
-        tbody: ({ children }: { children: React.ReactNode }) => <Table.Body>{children}</Table.Body>,
-        tr: ({ children }: { children: React.ReactNode }) => <Table.Row>{children}</Table.Row>,
+        tbody: ({ children }: { children: React.ReactNode }) => (
+            <Table.Body>{children}</Table.Body>
+        ),
+        tr: ({ children }: { children: React.ReactNode }) => (
+            <Table.Row>{children}</Table.Row>
+        ),
         th: ({ children }: { children: React.ReactNode }) => (
             <Table.Cell>{children}</Table.Cell>
         ),
-        td: ({ children }: { children: React.ReactNode }) => <Table.Cell>{children}</Table.Cell>,
+        td: ({ children }: { children: React.ReactNode }) => (
+            <Table.Cell>{children}</Table.Cell>
+        ),
         ul: ({ children }: { children: React.ReactNode }) => (
             <List.Root>{children}</List.Root>
         ),
@@ -60,9 +135,10 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             <List.Root>{children}</List.Root>
         ),
         li: ({ children }: { children: React.ReactNode }) => (
-            <List.Item ml={4}>{children}</List.Item>
+            <List.Item ml={4} mb={2}>{children}</List.Item>
         ),
     };
+
 
     useEffect(() => {
         fetch(documentPath)

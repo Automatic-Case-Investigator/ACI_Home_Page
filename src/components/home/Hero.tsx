@@ -4,7 +4,7 @@ import { Icon } from "@chakra-ui/react"
 
 export const Hero = () => {
     return (
-        <Box m={16}>
+        <Box m={24}>
             <Box display="flex" justifyContent="center">
                 <Box flex={1} m={2}>
                     <Heading size="5xl" mb={4}>Empowering security investigations with AI</Heading>

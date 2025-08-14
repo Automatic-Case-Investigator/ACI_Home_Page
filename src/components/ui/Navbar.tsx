@@ -10,7 +10,7 @@ export const Navbar = () => {
 
     const navbarItems: MenuLink[] = [
         { label: "Get Started", to: "/documents/get_started" },
-        { label: "Details", to: "/details" }
+        { label: "Details", to: "/documents/project_structure" }
     ];
 
     return (

@@ -54,11 +54,13 @@ The main local backend responsible for communicating with the frontend and AI se
 #### Installation
 
 1. Clone the repository:  
+
     ```bash
     git clone https://github.com/Automatic-Case-Investigator/ACI_Backend.git
     ```
 
 2. Copy the sample environment file and customize it:  
+
     ```bash
     cp sample.env .env
     ```
@@ -66,12 +68,14 @@ The main local backend responsible for communicating with the frontend and AI se
 3. Build and run using Docker Compose:  
 
    **Linux / Mac:**  
+
     ```bash
     sudo docker compose -f docker-compose.yml build
     sudo docker compose -f docker-compose.yml up
     ```
 
    **Windows:**  
+
     ```bash
     sudo docker compose -f docker-compose-windows.yml build
     sudo docker compose -f docker-compose-windows.yml up
@@ -86,24 +90,28 @@ The backend for hosting, managing, and training models.
 #### Installation
 
 1. Clone the repository:  
+
     ```bash
     git clone https://github.com/Automatic-Case-Investigator/ACI_AI_Backend.git
     ```
 
-2. Copy the sample environment file and customize it:  
+2. Copy the sample environment file and customize it: 
+ 
     ```bash
     cp sample.env .env
     ```
 
 3. Build and run using Docker Compose:  
 
-   **Linux / Mac:**  
+   **Linux / Mac:**
+  
     ```bash
     sudo docker compose -f docker-compose.yml build
     sudo docker compose -f docker-compose.yml up
     ```
 
    **Windows:**  
+
     ```bash
     sudo docker compose -f docker-compose-windows.yml build
     sudo docker compose -f docker-compose-windows.yml up
@@ -118,16 +126,19 @@ The frontend for the entire application.
 #### Installation
 
 1. Clone the repository:  
+
     ```bash
     git clone https://github.com/Automatic-Case-Investigator/ACI_Dashboard.git
     ```
 
 2. Copy the sample environment file and customize it:  
+
     ```bash
     cp sample.env .env
     ```
 
-3. Install dependencies and run the server:  
+3. Install dependencies and run the server:
+  
     ```bash
     npm install
     npm start
@@ -138,6 +149,11 @@ The frontend for the entire application.
 ### 4. Docker (Optional)
 
 To build and run all components with Docker:  
+
 ```bash
 sudo docker compose build
 sudo docker compose up
+```
+
+If you finished setting up the three components, feel free to move on to [connecting with SOC technologies](/documents/connecting_with_soc_tech)
+

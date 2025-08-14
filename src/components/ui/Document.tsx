@@ -60,12 +60,11 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             <List.Root>{children}</List.Root>
         ),
         li: ({ children }: { children: React.ReactNode }) => (
-            <List.Item>{children}</List.Item>
+            <List.Item ml={4}>{children}</List.Item>
         ),
     };
 
     useEffect(() => {
-        console.log(documentPath)
         fetch(documentPath)
             .then((response) => {
                 if (!response.ok) throw new Error("Failed to fetch document");
@@ -73,10 +72,10 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             })
             .then((text) => setBlogContent(text))
             .catch((err) => console.error(err));
-    }, []);
+    }, [documentPath]);
 
     return (
-        <Box mx={{ base: 4, md: 24 }} my={8}>
+        <Box mx={{ base: 8, md: 32 }} my={8}>
             <Markdown components={components as Components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                 {blogContent}
             </Markdown>

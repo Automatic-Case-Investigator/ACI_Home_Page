@@ -2,5 +2,13 @@
     "get_started": {
         "title": "Get Started",
         "path": "/docs_src/get_started.md"
+    },
+    "connecting_with_soc_tech": {
+        "title": "Connecting with SOC Technologies",
+        "path": "/docs_src/connecting_with_soc_tech.md"
+    },
+    "project_structure": {
+        "title": "Project Structure",
+        "path": "/docs_src/design_details/project_structure.md"
     }
 }

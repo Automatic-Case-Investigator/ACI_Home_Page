@@ -1,6 +1,7 @@
 import { Box, Heading, Text, Link, Flex } from "@chakra-ui/react"
 import { Hero } from "@/components/home/Hero"
 import { Navbar } from "@/components/ui/Navbar"
+import { Footer } from "@/components/ui/Footer"
 
 export const Home = () => {
     return (
@@ -42,22 +43,7 @@ export const Home = () => {
                 <Text fontStyle="italic" color="gray.400">Demonstration coming soon!</Text>
             </Box>
 
-            <Box as="footer" bg="blue.900" color="white" py={6} mt={12}>
-                <Flex justify="center" align="center" gap={6}>
-                    <Text>
-                        Github:
-                        <Link href="https://github.com/Automatic-Case-Investigator" color="blue.500" ml={1}>
-                            Automatic-Case-Investigator
-                        </Link>
-                    </Text>
-                    <Text>
-                        Contact:
-                        <Link href="mailto:lee4649@purdue.edu" color="blue.500" ml={1}>
-                            lee4649@purdue.edu
-                        </Link>
-                    </Text>
-                </Flex>
-            </Box>
+            <Footer />
         </Box>
     )
 }

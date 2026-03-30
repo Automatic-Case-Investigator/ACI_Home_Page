@@ -1,4 +1,3 @@
-import { Footer } from "@/components/ui/Footer"
 import { Navbar } from "@/components/ui/Navbar"
 import { Box, Heading, Link } from "@chakra-ui/react"
 

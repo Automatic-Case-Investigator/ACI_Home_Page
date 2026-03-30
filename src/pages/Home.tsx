@@ -226,32 +226,6 @@ export const Home = () => {
                     </Grid>
                 </Box>
             </Box>
-
-            <Box px={{ base: 5, md: 10 }} pb={{ base: 14, md: 20 }}>
-                <Box p={{ base: 6, md: 8 }} borderRadius="36px" bg={pageColors.deploymentBackground} border={`1px solid ${pageColors.borderEmphasis}`}>
-                    <SimpleGrid columns={{ base: 1, lg: 2 }} gap={8} alignItems="center">
-                        <Box>
-                            <Text textTransform="uppercase" letterSpacing="0.22em" fontSize="xs" color={pageColors.textHighlight} mb={4}>Deployment fit</Text>
-                            <Heading size="3xl" mb={4}>Built for teams that need AI-assisted investigation inside controlled environments.</Heading>
-                            <Text color={pageColors.textSubtle} maxW="640px">
-                                ACI is positioned for security teams that want automation without exporting sensitive telemetry to an external SaaS workflow. It fits organizations that need on-premise deployment, reproducible investigation procedures, and a clearer audit trail for analyst decisions.
-                            </Text>
-                        </Box>
-
-                        <VStack align="stretch" gap={4}>
-                            <Box p={5} borderRadius="24px" bg={pageColors.surfaceOverlayStrong}>
-                                <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.18em" color={pageColors.textPrimaryAccent} mb={2}>Suggested content addition</Text>
-                                <Text color={pageColors.textSubtle}>A future public demo could show a full alert-to-investigation trace, including generated queries and correlated evidence snapshots.</Text>
-                            </Box>
-                            <Box p={5} borderRadius="24px" bg={pageColors.surfaceOverlayStrong}>
-                                <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.18em" color={pageColors.textSecondaryAccent} mb={2}>Suggested content addition</Text>
-                                <Text color={pageColors.textSubtle}>A technical section on supported SIEM integrations, model hosting, and case ingestion APIs would strengthen credibility for engineering buyers.</Text>
-                            </Box>
-                        </VStack>
-                    </SimpleGrid>
-                </Box>
-            </Box>
-
             <Footer />
         </Box>
     )

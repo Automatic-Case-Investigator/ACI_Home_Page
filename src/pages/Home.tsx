@@ -128,7 +128,7 @@ export const Home = () => {
                                         <Heading size="lg">From case intake to evidence-backed findings</Heading>
                                     </Box>
                                     <Box p={4}>
-                                        <Image src="/assets/images/cases.png" alt="Security case overview" borderRadius="24px" />
+                                        <Image src="/assets/images/cases.png" alt="Security case overview" />
                                     </Box>
                                     <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} p={4} pt={0}>
                                         <Box p={4} borderRadius="24px" bg={pageColors.surfaceOverlay}>

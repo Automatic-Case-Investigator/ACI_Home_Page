@@ -4,44 +4,45 @@ import { Footer } from "@/components/ui/Footer"
 import { landingPageColors as pageColors } from "@/themes/landingPageColors"
 
 const problemPoints = [
-    "One attacker can trigger a major incident, but response still scales with analyst hours.",
-    "SOC teams spend significant time reviewing noisy logs before they reach a meaningful lead.",
-    "Incident quality depends on whether the assigned analyst has the right specialization at the right time.",
+    "Most AI SOC tools optimize for speed across the entire alert lifecycle, trading investigation depth for triage throughput.",
+    "Alerts are often diagnosed individually with limited awareness to a broader activity context.",
+    "Findings get asserted as narrative summaries with no path back to the log events that actually support them.",
+    "Investigation quality still depends on which analyst is free and how much SIEM pivoting they have time for.",
 ]
 
 const featureCards = [
     {
-        eyebrow: "Plan generation",
-        title: "Turn case context into an investigation procedure",
+        eyebrow: "Quick alert / case triage",
+        title: "Evidence-backed triage in seconds",
         description:
-            "ACI ingests case details and produces structured investigation tasks so analysts do not start from a blank page during triage.",
+            "A 12-step agent reads the case's SIEM evidence and returns a triage report with a prioritized investigation plan, instead of a ticket sitting in an analyst queue.",
     },
     {
-        eyebrow: "Autonomous investigation",
-        title: "Generate SIEM queries, run them, and evaluate IoCs iteratively",
+        eyebrow: "Deep investigation",
+        title: "Findings grounded in real evidence",
         description:
-            "The system loops through query generation, retrieval, and evidence assessment to surface the logs that matter faster than manual pivoting.",
+            "A 40-step budget loops through seed, claim, think, tool-use, and pivot steps, generating and running SIEM queries until each task's findings are grounded in retrieved evidence, not just asserted.",
     },
     {
-        eyebrow: "Correlation intelligence",
-        title: "Use LLM reasoning to connect investigation context and evidence",
+        eyebrow: "Autonomous workflow",
+        title: "No manual kickoff required",
         description:
-            "Language models handle planning, query generation, and iterative evidence assessment so analysts can follow correlated findings across security events.",
+            "Wazuh and TheHive webhooks trigger the pipeline on new case and new alert events, moving a case from intake to a published verdict without anyone kicking off a run by hand.",
     },
 ]
 
 const workflowSteps = [
-    "Ingest security case information from the incident workflow.",
-    "Generate investigation objectives and concrete analysis tasks.",
-    "Produce SIEM queries and collect matching telemetry.",
-    "Evaluate candidate IoCs and correlate evidence across events.",
-    "Return a traceable investigation trail for the human analyst.",
+    "Wazuh and TheHive alerts arrive through webhook integrations.",
+    "The orchestrator agent routes each alert or case to the triage agent for an initial read against SIEM evidence.",
+    "Verified cases hand off to the investigation agent, which executes the investigation plan to retrieve more evidences.",
+    "Analysts watch the full reasoning trace and evidence trail live on the live dashboard.",
 ]
 
 const proofItems = [
-    "Reduce investigation setup time by turning case context into an actionable plan.",
-    "Minimize manual log triage by automatically hunting for pertinent evidence in SIEM.",
-    "Act as a persistent SOC knowledge layer that helps prevent missed evidence.",
+    "Task-driven investigation: investigations are decomposed into discrete, prioritized tasks worked one at a time, keeping them focused and auditable.",
+    "Evidence-anchored findings: confirmed facts, working hypotheses, and extracted artifacts are tracked and reasoned across tasks.",
+    "Real-time reasoning visibility: every tool call and decision streams to the dashboard as it happens.",
+    "MCP tool ecosystem: Scalable integrations with SIEM, SOAR, workspace, and memory providers via Model Context Protocol",
 ]
 
 export const Home = () => {
@@ -67,11 +68,11 @@ export const Home = () => {
                                     letterSpacing="-0.04em"
                                     maxW="920px"
                                 >
-                                    Empowering security investigations with AI
+                                    Empowering SOC Investigations with AI
                                 </Heading>
 
                                 <Text fontSize={{ base: "lg", md: "xl" }} color={pageColors.textSecondary} maxW="700px">
-                                    Automatic Case Investigator (ACI) is an AI SOC analyst platform targeted at SIEMs. It ingests security cases, generates investigation plans, executes iterative SIEM investigations, and produces evidence-driven incident response reports.
+                                    Automatic Case Investigator (ACI) is an on-premise multi-step security investigation platform built with Agentic AI. It triages and investigates alerts and cases and produces evidence-backed incident reports.
                                 </Text>
 
                                 <HStack gap={4} flexWrap="wrap">
@@ -84,20 +85,15 @@ export const Home = () => {
                                 </HStack>
 
                                 <SimpleGrid columns={{ base: 1, md: 3 }} gap={4} w="100%" pt={4}>
+                                    <Box p={5} borderRadius="2xl" bg={pageColors.surfaceGlass} border={`1px solid ${pageColors.borderSecondaryAccent}`}>
+                                        <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.18em" color={pageColors.textSecondaryAccent} mb={2}>Core outcome</Text>
+                                        <Text fontSize="lg" fontWeight="600">Evidence over narrative</Text>
+                                        <Text color={pageColors.textQuaternary}>Every finding is tied to a retrieved log event, not an unconfirmed summary.</Text>
+                                    </Box>
                                     <Box p={5} borderRadius="2xl" bg={pageColors.surfaceGlass} border={`1px solid ${pageColors.borderPrimaryAccent}`}>
                                         <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.18em" color={pageColors.textPrimaryAccent} mb={2}>Deployment</Text>
                                         <Text fontSize="lg" fontWeight="600">On-premise by design</Text>
-                                        <Text color={pageColors.textQuaternary}>Keep sensitive investigation data within your own environment.</Text>
-                                    </Box>
-                                    <Box p={5} borderRadius="2xl" bg={pageColors.surfaceGlass} border={`1px solid ${pageColors.borderSecondaryAccent}`}>
-                                        <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.18em" color={pageColors.textSecondaryAccent} mb={2}>Core outcome</Text>
-                                        <Text fontSize="lg" fontWeight="600">Lower analyst effort</Text>
-                                        <Text color={pageColors.textQuaternary}>Reduce manual triage and repeated SIEM pivoting across cases.</Text>
-                                    </Box>
-                                    <Box p={5} borderRadius="2xl" bg={pageColors.surfaceGlass} border={`1px solid ${pageColors.borderLight}`}>
-                                        <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.18em" color={pageColors.textHighlight} mb={2}>Model stack</Text>
-                                        <Text fontSize="lg" fontWeight="600">LLM-driven investigation</Text>
-                                        <Text color={pageColors.textQuaternary}>Reason over case context, generate SIEM queries, and evaluate evidence iteratively.</Text>
+                                        <Text color={pageColors.textQuaternary}>Runs on your own infrastructure with local inference support, ensuring no sensitive security data leaves your environment.</Text>
                                     </Box>
                                 </SimpleGrid>
                             </VStack>
@@ -123,27 +119,9 @@ export const Home = () => {
                                     bg={pageColors.heroPanelBackground}
                                     boxShadow={pageColors.heroShadow}
                                 >
-                                    <Box px={6} py={5} borderBottom={`1px solid ${pageColors.borderMedium}`}>
-                                        <Text fontSize="xs" textTransform="uppercase" letterSpacing="0.24em" color={pageColors.textPrimaryAccent} mb={2}>Investigation loop</Text>
-                                        <Heading size="lg">From case intake to evidence-backed findings</Heading>
-                                    </Box>
                                     <Box p={4}>
-                                        <Image src="/assets/images/cases.png" alt="Security case overview" />
+                                        <Image src="/assets/images/example_trajectory.png" alt="Example trajectory" />
                                     </Box>
-                                    <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} p={4} pt={0}>
-                                        <Box p={4} borderRadius="24px" bg={pageColors.surfaceOverlay}>
-                                            <Text fontSize="sm" color={pageColors.textPrimaryAccent} mb={2}>Case understanding</Text>
-                                            <Text color={pageColors.textTertiary}>
-                                                Extract goals, entities, and likely investigation paths from incoming alert context.
-                                            </Text>
-                                        </Box>
-                                        <Box p={4} borderRadius="24px" bg={pageColors.surfaceOverlay}>
-                                            <Text fontSize="sm" color={pageColors.textSecondaryAccent} mb={2}>Evidence correlation</Text>
-                                            <Text color={pageColors.textTertiary}>
-                                                Iterate through SIEM search results and rank suspicious leads for analyst review.
-                                            </Text>
-                                        </Box>
-                                    </SimpleGrid>
                                 </Box>
                             </Box>
                         </GridItem>
@@ -155,7 +133,7 @@ export const Home = () => {
                 <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
                     <Box p={{ base: 6, md: 8 }} borderRadius="32px" bg={pageColors.backgroundSectionAlt} border={`1px solid ${pageColors.borderSoft}`}>
                         <Text textTransform="uppercase" letterSpacing="0.22em" fontSize="xs" color={pageColors.textPrimaryAccent} mb={4}>The problem</Text>
-                        <Heading size="2xl" mb={5} maxW="620px">SOC investigations are still bottlenecked by human attention.</Heading>
+                        <Heading size="2xl" mb={5} maxW="620px">Conventional AI SOC tools optimize for speed, not depth.</Heading>
                         <VStack align="stretch" gap={4}>
                             {problemPoints.map((point) => (
                                 <Box key={point} p={4} borderRadius="24px" bg={pageColors.surfaceOverlay}>
@@ -167,7 +145,7 @@ export const Home = () => {
 
                     <Box p={{ base: 6, md: 8 }} borderRadius="32px" bg={pageColors.whyBackground} border={`1px solid ${pageColors.borderMedium}`}>
                         <Text textTransform="uppercase" letterSpacing="0.22em" fontSize="xs" color={pageColors.textHighlight} mb={4}>Why ACI</Text>
-                        <Heading size="2xl" mb={5} maxW="600px">A system that investigates with your analysts instead of just assisting them.</Heading>
+                        <Heading size="2xl" mb={5} maxW="600px">ACI prioritizes thorough investigation before reaching conclusions.</Heading>
                         <VStack align="stretch" gap={4}>
                             {proofItems.map((item) => (
                                 <Flex key={item} gap={4} align="start" p={4} borderRadius="24px" bg={pageColors.surfaceOverlayMuted}>
@@ -183,10 +161,7 @@ export const Home = () => {
             <Box id="features" px={{ base: 5, md: 10 }} py={{ base: 14, md: 18 }} bg={pageColors.sectionTint}>
                 <Text textTransform="uppercase" letterSpacing="0.22em" fontSize="xs" color={pageColors.textPrimaryAccent} mb={4}>Capabilities</Text>
                 <Flex justify="space-between" gap={6} align={{ base: "start", lg: "end" }} direction={{ base: "column", lg: "row" }} mb={8}>
-                    <Heading size="3xl" maxW="780px">Designed for investigation generation, autonomous SIEM exploration, and evidence correlation.</Heading>
-                    <Text maxW="520px" color={pageColors.textTertiary}>
-                        The platform focuses on the repetitive and cognitively expensive parts of incident investigation so analysts can spend more time validating conclusions and deciding response.
-                    </Text>
+                    <Heading size="3xl" maxW="780px">What ACI Can Do</Heading>
                 </Flex>
 
                 <SimpleGrid columns={{ base: 1, lg: 3 }} gap={6}>
@@ -203,7 +178,7 @@ export const Home = () => {
             <Box px={{ base: 5, md: 10 }} py={{ base: 14, md: 18 }}>
                 <Box p={{ base: 6, md: 8 }} borderRadius="32px" bg={pageColors.backgroundSection} border={`1px solid ${pageColors.borderSoft}`}>
                     <Text textTransform="uppercase" letterSpacing="0.22em" fontSize="xs" color={pageColors.textPrimaryAccent} mb={4}>Workflow</Text>
-                    <Heading size="2xl" mb={6}>How the investigation loop works</Heading>
+                    <Heading size="2xl" mb={6}>How ACI works</Heading>
                     <Grid templateColumns={{ base: "1fr", lg: "1.1fr 0.9fr" }} gap={8} alignItems="start">
                         <VStack align="stretch" gap={4}>
                             {workflowSteps.map((step, index) => (
@@ -220,7 +195,7 @@ export const Home = () => {
 
                         <SimpleGrid columns={{ base: 1, md: 2, lg: 1 }} gap={4}>
                             <Box borderRadius="24px" overflow="hidden" bg={pageColors.surfaceOverlay}>
-                                <Image src="/assets/images/ACI_rev_shell_found.png" alt="Adding a SIEM integration" />
+                                <Image src="/assets/images/example_trajectory.png" alt="Investigation agent surfacing a reverse shell finding" />
                             </Box>
                         </SimpleGrid>
                     </Grid>

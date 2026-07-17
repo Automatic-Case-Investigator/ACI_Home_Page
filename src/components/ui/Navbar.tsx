@@ -1,6 +1,7 @@
-import { Box, Button, Flex, HStack, IconButton, Menu, Portal } from "@chakra-ui/react";
+import { Button, Flex, HStack, IconButton, Menu, Portal } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom"
 import { RxHamburgerMenu } from "react-icons/rx";
+import { FaGithub } from "react-icons/fa";
 
 export const Navbar = () => {
     interface MenuLink {
@@ -38,44 +39,58 @@ export const Navbar = () => {
                 </HStack>
             </RouterLink>
 
-            <HStack display={{ base: "none", md: "flex" }} gap={2}>
-                {navbarItems.map((navbarItem) => (
-                    <Button
-                        key={navbarItem.label}
-                        asChild
-                        variant="ghost"
-                        color="#dbeafe"
-                        _hover={{ bg: "rgba(255,255,255,0.07)", color: "#ffffff" }}
-                    >
-                        {navbarItem.isExternal ? <a href={navbarItem.to}>{navbarItem.label}</a> : <RouterLink to={navbarItem.to}>{navbarItem.label}</RouterLink>}
-                    </Button>
-                ))}
-            </HStack>
+            <HStack gap={2}>
+                <HStack display={{ base: "none", md: "flex" }} gap={2}>
+                    {navbarItems.map((navbarItem) => (
+                        <Button
+                            key={navbarItem.label}
+                            asChild
+                            variant="ghost"
+                            color="#dbeafe"
+                            _hover={{ bg: "rgba(255,255,255,0.07)", color: "#ffffff" }}
+                        >
+                            {navbarItem.isExternal ? <a href={navbarItem.to}>{navbarItem.label}</a> : <RouterLink to={navbarItem.to}>{navbarItem.label}</RouterLink>}
+                        </Button>
+                    ))}
+                </HStack>
 
-            <Menu.Root>
-                <Menu.Trigger asChild>
-                    <IconButton
-                        aria-label="Open Menu"
-                        display={{ base: "flex", md: "none" }}
-                        variant="ghost"
-                        color="#dbeafe"
-                        _hover={{ bg: "rgba(255,255,255,0.07)" }}
-                    >
-                        <RxHamburgerMenu />
-                    </IconButton>
-                </Menu.Trigger>
-                <Portal>
-                    <Menu.Positioner>
-                        <Menu.Content bg="#0d1828" border="1px solid rgba(148, 163, 184, 0.14)">
-                            {navbarItems.map((navbarItem) => (
-                                <Menu.Item key={navbarItem.label} value={navbarItem.label} asChild>
-                                    {navbarItem.isExternal ? <a href={navbarItem.to}>{navbarItem.label}</a> : <RouterLink to={navbarItem.to}>{navbarItem.label}</RouterLink>}
-                                </Menu.Item>
-                            ))}
-                        </Menu.Content>
-                    </Menu.Positioner>
-                </Portal>
-            </Menu.Root>
+                <IconButton
+                    asChild
+                    aria-label="Open GitHub repository"
+                    variant="ghost"
+                    color="#dbeafe"
+                    _hover={{ bg: "rgba(255,255,255,0.07)", color: "#ffffff" }}
+                >
+                    <a href="https://github.com/Automatic-Case-Investigator/ACI" target="_blank" rel="noopener noreferrer">
+                        <FaGithub />
+                    </a>
+                </IconButton>
+
+                <Menu.Root>
+                    <Menu.Trigger asChild>
+                        <IconButton
+                            aria-label="Open Menu"
+                            display={{ base: "flex", md: "none" }}
+                            variant="ghost"
+                            color="#dbeafe"
+                            _hover={{ bg: "rgba(255,255,255,0.07)" }}
+                        >
+                            <RxHamburgerMenu />
+                        </IconButton>
+                    </Menu.Trigger>
+                    <Portal>
+                        <Menu.Positioner>
+                            <Menu.Content bg="#0d1828" border="1px solid rgba(148, 163, 184, 0.14)">
+                                {navbarItems.map((navbarItem) => (
+                                    <Menu.Item key={navbarItem.label} value={navbarItem.label} asChild>
+                                        {navbarItem.isExternal ? <a href={navbarItem.to}>{navbarItem.label}</a> : <RouterLink to={navbarItem.to}>{navbarItem.label}</RouterLink>}
+                                    </Menu.Item>
+                                ))}
+                            </Menu.Content>
+                        </Menu.Positioner>
+                    </Portal>
+                </Menu.Root>
+            </HStack>
         </Flex>
     );
 };

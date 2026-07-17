@@ -1,14 +1,50 @@
 {
-    "get_started": {
+    "docs/get_started": {
         "title": "Get Started",
-        "path": "/docs_src/get_started.md"
+        "path": "/docs_src/docs/get_started.md"
     },
-    "connecting_with_soc_tech": {
-        "title": "Connecting with SOC Technologies",
-        "path": "/docs_src/connecting_with_soc_tech.md"
+    "reference/configuration": {
+        "title": "Configuration",
+        "path": "/docs_src/reference/configuration.md"
     },
-    "project_structure": {
-        "title": "Project Structure",
-        "path": "/docs_src/design_details/project_structure.md"
+    "architecture/overview": {
+        "title": "Overview",
+        "path": "/docs_src/architecture/overview.md"
+    },
+    "architecture/orchestrator": {
+        "title": "Orchestrator",
+        "path": "/docs_src/architecture/orchestrator.md"
+    },
+    "architecture/workspace": {
+        "title": "AVFS Workspace Indexing",
+        "path": "/docs_src/architecture/workspace.md"
+    },
+    "architecture/tools": {
+        "title": "MCP and Tool Policy",
+        "path": "/docs_src/architecture/tools.md"
+    },
+    "architecture/automation": {
+        "title": "Workflows and Webhooks",
+        "path": "/docs_src/architecture/automation.md"
+    },
+    "architecture/findings-board": {
+        "title": "Findings Board",
+        "path": "/docs_src/architecture/findings-board.md"
+    },
+    "architecture/runtime/agent-graph": {
+        "title": "Runtime & Agent Graph",
+        "path": "/docs_src/architecture/runtime/agent-graph.md"
+    },
+    "architecture/runtime/prompts": {
+        "title": "Prompt Composition",
+        "path": "/docs_src/architecture/runtime/prompts.md"
+    },
+    "architecture/runtime/queue-and-streaming": {
+        "title": "Queue Semantics & Model Streaming",
+        "path": "/docs_src/architecture/runtime/queue-and-streaming.md"
+    },
+    "blog/performing_multi_step_attack_analysis_with_agentic_ai": {
+        "title": "Performing Multi-Step Attack Analysis with Agentic AI",
+        "path": "/docs_src/blog/performing_multi_step_attack_analysis_with_agentic_ai.md"
     }
 }

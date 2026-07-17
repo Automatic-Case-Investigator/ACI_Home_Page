@@ -8,7 +8,7 @@ A few years ago, I was studying [Blue Team Level 1 (BTL1)](https://www.centri.or
 
 ## Overview
 
-Starting from a single wpscan alert, the system uncovered, entirely on its own:
+Starting from a single wpscan alert, the system autonomously reconstructed:
 
 - earlier service scans and directory fuzzing
 - a live reverse shell access
@@ -362,7 +362,7 @@ A few takeaways from the runs. First what went well, then where it fell short:
 
 **What can be improved**
 
-- **It reasons forwards better than backwards.** The recon entry recovered a mean 57.7% of phases vs 26.9% for the privilege-escalation entry, a gap that shows up in the per-phase table as well: the recon entry hit 5 of 8 phases at least twice, while the privilege-escalation entry hit only 2. The most likely explanation is proximity: from the wpscan alert, the adjacent attack phases (service scans, dirb, reverse shell) leave large volumes of web events that are easy to query. From the privilege-escalation alert, the earlier phases are temporally and causally distant, so the agent tends to focus on host-side movements instead of tracing back through the kill chain.
+- **It reasons forwards better than backwards.** The recon entry recovered a mean 57.7% of phases vs 26.9% for the privilege-escalation entry, a gap that shows up in the per-phase table as well: the recon entry hit 5 of 8 phases at least twice, while the privilege-escalation entry hit only 2. The most likely explanation is proximity: from the wpscan alert, the adjacent attack phases (service scans, dirb, reverse shell) leave large volumes of web events that are easy to query. From the privilege-escalation alert, the earlier phases are temporally and causally distant, so the agent tends to focus on host-side movements instead of tracing back through the kill chain. To mitigate this, further tuning of the playbooks is necessary.
 - **Thoroughness is uneven and costly.** The recon entry averaged ~359 model calls and ~13.3 M input tokens per run, several times more than the privilege-escalation entry (~97 calls, ~2.5 M tokens). The extra work stems from the recon entry's web-heavy context: the agent must sift through large volumes of benign IDS and scan noise before it can confirm that any individual event is meaningful, which drives repeated query refinement cycles.
 
 > Two phases in the fox dataset (a raw network SYN sweep and a no-tunneling

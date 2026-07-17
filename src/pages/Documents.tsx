@@ -1,19 +1,18 @@
 import visible_documents from "@/data/visible_documents.json"
-import { Navbar } from "@/components/ui/Navbar"
-import { Box, Heading } from "@chakra-ui/react"
-import { Link as RouterLink } from "react-router-dom"
-import { Link } from "@chakra-ui/react"
-import { Footer } from "@/components/ui/Footer"
+import { DocsLayout } from "@/components/ui/DocsLayout"
+import { DocsFolderOverview } from "@/components/ui/DocsFolderOverview"
+import { getImmediateChildren } from "@/components/ui/DocumentTree"
+import { landingPageColors as pageColors } from "@/themes/landingPageColors"
+import { Heading, Text } from "@chakra-ui/react"
 
 export const Documents = () => {
-    return <Box>
-        <Navbar />
-        <Box m={8} mt={20}>
-            <Heading>Available documents</Heading>
-            {
-                Object.entries(visible_documents).map((value) => <><RouterLink to={`/documents/${value[0]}`}><Link>{value[1]["title"]}</Link></RouterLink><br /></>)
-            }
-        </Box>
-        <Footer />
-    </Box>
+    const children = getImmediateChildren(visible_documents, "")
+
+    return (
+        <DocsLayout>
+            <Heading mb={2}>Documentation</Heading>
+            <Text color={pageColors.textTertiary} mb={6}>Browse the full set below, or use the sidebar to jump straight to a topic.</Text>
+            <DocsFolderOverview>{children}</DocsFolderOverview>
+        </DocsLayout>
+    )
 }

@@ -1,45 +1,54 @@
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Document } from "@/components/ui/Document";
-import { Footer } from "@/components/ui/Footer";
-import { Navbar } from "@/components/ui/Navbar";
+import { DocsFolderOverview } from "@/components/ui/DocsFolderOverview";
+import { DocsLayout } from "@/components/ui/DocsLayout";
+import { formatSegment, getImmediateChildren } from "@/components/ui/DocumentTree";
 import visible_documents from "@/data/visible_documents.json"
-import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Heading } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { NoPage } from "./NoPage";
 
 export const DocumentPage = () => {
-    const { documentId } = useParams();
-    const [documentPath, setDocumentPath] = useState<string>("");
+    const params = useParams();
+    const documentId = params["*"] ?? "";
 
-    useEffect(() => {
-        if (documentId) {
-            if (!visible_documents[documentId as keyof typeof visible_documents]) {
-                console.warn(`Document with ID ${documentId} not found`);
-                return;
-            }
-
-            const path = visible_documents[documentId as keyof typeof visible_documents]["path"];
-            if (typeof path === "string") {
-                setDocumentPath(path);
-            } else {
-                console.warn(`Document with ID ${documentId} not found`);
-            }
+    const resolved = useMemo(() => {
+        const exact = visible_documents[documentId as keyof typeof visible_documents];
+        if (exact && typeof exact.path === "string") {
+            return { type: "leaf" as const, path: exact.path, title: exact.title };
         }
+
+        const prefix = `${documentId}/`;
+        const hasNested = Object.keys(visible_documents).some((key) => key.startsWith(prefix));
+        if (hasNested) {
+            return { type: "folder" as const };
+        }
+
+        return { type: "notfound" as const };
     }, [documentId]);
 
-    return <>
-        {
-            documentPath.length > 0 ? (
-                <>
-                    <Navbar />
-                    <Box mt={40}>
-                        <Document documentPath={documentPath} />
-                    </Box>
-                    <Footer />
-                </>
-            ) : (
-                <NoPage />
-            )
-        }
-    </>
+    if (resolved.type === "notfound") {
+        return <NoPage />
+    }
+
+    if (resolved.type === "folder") {
+        const folderName = documentId.split("/").filter(Boolean).pop() ?? "Documents";
+        const children = getImmediateChildren(visible_documents, `${documentId}/`);
+
+        return (
+            <DocsLayout expandValue={documentId}>
+                <Breadcrumbs documentId={documentId} currentLabel={formatSegment(folderName)} />
+                <Heading mb={6}>{formatSegment(folderName)}</Heading>
+                <DocsFolderOverview>{children}</DocsFolderOverview>
+            </DocsLayout>
+        )
+    }
+
+    return (
+        <DocsLayout activeValue={documentId}>
+            <Breadcrumbs documentId={documentId} currentLabel={resolved.title} />
+            <Document documentPath={resolved.path} />
+        </DocsLayout>
+    )
 }

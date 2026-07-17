@@ -10,9 +10,10 @@ export const Navbar = () => {
     }
 
     const navbarItems: MenuLink[] = [
-        { label: "Capabilities", to: "/#features", isExternal: true },
-        { label: "Get Started", to: "/documents/get_started" },
-        { label: "Architecture", to: "/documents/project_structure" }
+        { label: "Get Started", to: "/documents/docs/get_started" },
+        { label: "Docs", to: "/documents/docs" },
+        { label: "Architecture", to: "/documents/architecture" },
+        { label: "Blog", to: "/documents/blog" }
     ];
 
     return (
@@ -34,14 +35,6 @@ export const Navbar = () => {
             <RouterLink to="/">
                 <HStack gap={3}>
                     <img src="/assets/icons/ACI_small.svg" alt="ACI logo" width={34} />
-                    <Box display={{ base: "none", sm: "block" }}>
-                        <Box color="#f4f7fb" fontSize="sm" fontWeight="700" letterSpacing="0.08em" textTransform="uppercase">
-                            Automatic Case Investigator
-                        </Box>
-                        <Box color="rgba(244,247,251,0.56)" fontSize="xs">
-                            Evidence-driven SOC investigation stack
-                        </Box>
-                    </Box>
                 </HStack>
             </RouterLink>
 

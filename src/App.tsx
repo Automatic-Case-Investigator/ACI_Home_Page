@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/documents" element={<Documents />} />
-          <Route path="/documents/:documentId" element={<DocumentPage />} />
+          <Route path="/documents/*" element={<DocumentPage />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>

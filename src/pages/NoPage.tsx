@@ -1,9 +1,10 @@
 import { Navbar } from "@/components/ui/Navbar"
+import { landingPageColors as pageColors } from "@/themes/landingPageColors"
 import { Box, Heading, Link } from "@chakra-ui/react"
 
 export const NoPage = () => {
     return (
-        <>
+        <Box color={pageColors.text} minH="100vh">
             <Navbar />
             <Box display="flex" flexDirection="column" alignItems="center" mt={20}>
                 <Heading size="4xl" textAlign="center">Page Not Found</Heading>
@@ -12,6 +13,6 @@ export const NoPage = () => {
                 <Box mb={4} />
                 <Link href="/">Return to Home</Link>
             </Box>
-        </>
+        </Box>
     )
 }

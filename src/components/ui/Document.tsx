@@ -1,5 +1,7 @@
 
 import { Box, Heading, Link, Separator, Text, Table, List } from "@chakra-ui/react";
+import { landingPageColors as pageColors } from "@/themes/landingPageColors"
+import { Mermaid } from "@/components/ui/Mermaid"
 import { Highlight, themes } from "prism-react-renderer"
 import Markdown, { Components } from "react-markdown";
 import { useEffect, useState } from "react";
@@ -56,6 +58,10 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
         }) => {
             const language = className?.replace("language-", "") || "";
 
+            if (language === "mermaid") {
+                return <Mermaid chart={String(children).trim()} />;
+            }
+
             if (language) {
                 return (
                     <Highlight
@@ -63,16 +69,16 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
                         language={language as any}
                         theme={themes.palenight}
                     >
-                        {({ style, tokens, getLineProps, getTokenProps }) => (
+                        {({ tokens, getLineProps, getTokenProps }) => (
                             <Box
                                 as="pre"
                                 p={4}
                                 mb={4}
                                 borderRadius="md"
                                 overflowX="auto"
-                                bg="gray.800"
-                                color="white"
-                                style={style}
+                                bg={pageColors.backgroundSection}
+                                color={pageColors.text}
+                                border={`1px solid ${pageColors.borderSoft}`}
                             >
                                 {tokens.map((line, i) => (
                                     <div key={i} {...getLineProps({ line })}>
@@ -88,45 +94,39 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             }
 
             return (
-                <Highlight
-                    code={String(children).trim()}
-                    language={"text"}
-                    theme={themes.palenight}
+                <Box
+                    as="code"
+                    px={1.5}
+                    py={0.5}
+                    borderRadius="4px"
+                    bg={pageColors.backgroundSection}
+                    color={pageColors.textHighlight}
+                    fontSize="0.9em"
                 >
-                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <pre style={{ ...style, display: "inline-block", borderRadius: 4, paddingLeft: 4, paddingRight: 4 }}>
-                            {tokens.map((line, i) => (
-                                <div key={i} {...getLineProps({ line })}>
-                                    {line.map((token, key) => (
-                                        <span key={key} {...getTokenProps({ token })} />
-                                    ))}
-                                </div>
-                            ))}
-                        </pre>
-                    )}
-                </Highlight>
+                    {children}
+                </Box>
             );
         },
 
         pre: ({ children }: { children: any }) => <>{children}</>,
 
         table: ({ children }: { children: React.ReactNode }) => (
-            <Table.Root mb={4}>{children}</Table.Root>
+            <Table.Root mb={4} border={`1px solid ${pageColors.borderSoft}`} borderRadius="12px" overflow="hidden">{children}</Table.Root>
         ),
         thead: ({ children }: { children: React.ReactNode }) => (
-            <Table.Header bg="gray.100">{children}</Table.Header>
+            <Table.Header bg={pageColors.backgroundSection} color={pageColors.text}>{children}</Table.Header>
         ),
         tbody: ({ children }: { children: React.ReactNode }) => (
             <Table.Body>{children}</Table.Body>
         ),
         tr: ({ children }: { children: React.ReactNode }) => (
-            <Table.Row>{children}</Table.Row>
+            <Table.Row bg="transparent">{children}</Table.Row>
         ),
         th: ({ children }: { children: React.ReactNode }) => (
-            <Table.Cell>{children}</Table.Cell>
+            <Table.Cell borderColor={pageColors.borderSoft} color={pageColors.text} fontWeight="600">{children}</Table.Cell>
         ),
         td: ({ children }: { children: React.ReactNode }) => (
-            <Table.Cell>{children}</Table.Cell>
+            <Table.Cell borderColor={pageColors.borderSoft} color={pageColors.textSoft}>{children}</Table.Cell>
         ),
         ul: ({ children }: { children: React.ReactNode }) => (
             <List.Root>{children}</List.Root>
@@ -136,6 +136,38 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
         ),
         li: ({ children }: { children: React.ReactNode }) => (
             <List.Item ml={4} mb={2}>{children}</List.Item>
+        ),
+
+        details: ({ children }: { children: React.ReactNode }) => (
+            <Box
+                as="details"
+                mb={4}
+                borderRadius="12px"
+                border={`1px solid ${pageColors.borderSoft}`}
+                bg={pageColors.backgroundSection}
+                px={4}
+                py={2}
+                css={{ "& > summary": { listStyle: "none" }, "& > summary::-webkit-details-marker": { display: "none" } }}
+            >
+                {children}
+            </Box>
+        ),
+        summary: ({ children }: { children: React.ReactNode }) => (
+            <Box
+                as="summary"
+                cursor="pointer"
+                py={2}
+                fontWeight="600"
+                color={pageColors.textHighlight}
+                _hover={{ color: pageColors.textPrimaryAccent }}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                _before={{ content: '"▸"', display: "inline-block", transition: "transform 0.15s ease" }}
+                css={{ "details[open] > &::before": { transform: "rotate(90deg)" } }}
+            >
+                {children}
+            </Box>
         ),
     };
 
@@ -151,7 +183,7 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
     }, [documentPath]);
 
     return (
-        <Box mx={{ base: 8, md: 32 }} my={8}>
+        <Box>
             <Markdown components={components as Components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                 {blogContent}
             </Markdown>

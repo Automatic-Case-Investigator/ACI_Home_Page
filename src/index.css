@@ -2,10 +2,7 @@
 
 :root {
   color-scheme: dark;
-  background:
-    radial-gradient(circle at top left, rgba(73, 104, 145, 0.12), transparent 30%),
-    radial-gradient(circle at top right, rgba(82, 106, 128, 0.08), transparent 22%),
-    #08111d;
+  background: #11141b;
 }
 
 html {

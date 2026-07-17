@@ -47,8 +47,9 @@ const proofItems = [
 
 export const Home = () => {
     return (
-        <Box bg={pageColors.background} color={pageColors.text} overflow="hidden">
+        <Box color={pageColors.text} overflow="hidden" display="flex" flexDirection="column" minH="100vh">
             <Navbar />
+            <Box flex="1">
             <Box position="relative" pt={{ base: 28, md: 36 }}>
                 <Box
                     position="absolute"
@@ -68,7 +69,7 @@ export const Home = () => {
                                     letterSpacing="-0.04em"
                                     maxW="920px"
                                 >
-                                    Empowering SOC Investigations with AI
+                                    Empowering Security Investigations with AI
                                 </Heading>
 
                                 <Text fontSize={{ base: "lg", md: "xl" }} color={pageColors.textSecondary} maxW="700px">
@@ -77,10 +78,10 @@ export const Home = () => {
 
                                 <HStack gap={4} flexWrap="wrap">
                                     <Button asChild size="lg" bg={pageColors.cta} color={pageColors.background} _hover={{ bg: pageColors.ctaHover }}>
-                                        <a href="#features">Explore capabilities</a>
+                                        <a href="/documents/docs/get_started">Get Started</a>
                                     </Button>
                                     <Button asChild size="lg" variant="outline" borderColor={pageColors.borderButton} color={pageColors.text} _hover={{ bg: pageColors.surfaceHover }}>
-                                        <a href="/documents/get_started">Read documentation</a>
+                                        <a href="/documents/blog/performing_multi_step_attack_analysis_with_agentic_ai">See How It Works</a>
                                     </Button>
                                 </HStack>
 
@@ -99,8 +100,8 @@ export const Home = () => {
                             </VStack>
                         </GridItem>
 
-                        <GridItem>
-                            <Box position="relative" maxW="640px" mx="auto">
+                        <GridItem justifySelf={{ base: "stretch", xl: "end" }}>
+                            <Box position="relative" w={{ base: "100%", xl: "50vw" }} maxW="none" mx="auto">
                                 <Box
                                     position="absolute"
                                     top="-28px"
@@ -113,14 +114,14 @@ export const Home = () => {
                                 />
                                 <Box
                                     position="relative"
-                                    borderRadius="32px"
+                                    borderRadius="0px"
                                     overflow="hidden"
                                     border={`1px solid ${pageColors.borderStrong}`}
                                     bg={pageColors.heroPanelBackground}
                                     boxShadow={pageColors.heroShadow}
                                 >
                                     <Box p={4}>
-                                        <Image src="/assets/images/example_trajectory.png" alt="Example trajectory" />
+                                        <Image w="100%" src="/assets/images/example_conversation.png" alt="Example conversation" />
                                     </Box>
                                 </Box>
                             </Box>
@@ -195,11 +196,12 @@ export const Home = () => {
 
                         <SimpleGrid columns={{ base: 1, md: 2, lg: 1 }} gap={4}>
                             <Box borderRadius="24px" overflow="hidden" bg={pageColors.surfaceOverlay}>
-                                <Image src="/assets/images/example_trajectory.png" alt="Investigation agent surfacing a reverse shell finding" />
+                                <Image src="/assets/images/example_investigation.png" alt="Example investigation page" />
                             </Box>
                         </SimpleGrid>
                     </Grid>
                 </Box>
+            </Box>
             </Box>
             <Footer />
         </Box>

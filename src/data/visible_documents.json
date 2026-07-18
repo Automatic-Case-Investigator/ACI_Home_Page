@@ -2,7 +2,7 @@
     "docs/getting-started": {
         "title": "Getting Started",
         "path": "/docs_src/docs/getting-started.md",
-        "description": "Install, configure, and run the ACI platform end to end."
+        "description": "Install, configure, and run ACI end to end."
     },
     "docs/connecting-with-soc-tech": {
         "title": "Connecting with SOC Technologies",
@@ -67,6 +67,6 @@
     "blog/performing-multi-step-attack-analysis-with-agentic-ai": {
         "title": "Performing Multi-Step Attack Analysis with Agentic AI",
         "path": "/docs_src/blog/performing-multi-step-attack-analysis-with-agentic-ai.md",
-        "description": "Starting from a single low-severity alert, an ACI agent reconstructed a full attack chain on its own — no one pointed it there. Here's how the task queue, evidence tracking, and evaluation work."
+        "description": "Starting from a single low-severity alert, how ACI reconstructed multiple phases in the attack chain on its own."
     }
 }

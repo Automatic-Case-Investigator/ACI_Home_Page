@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const SITE_URL = "https://aci.acezxn.me";
+export const SITE_URL = "https://aci.acezxn.net";
 export const DEFAULT_DESCRIPTION =
     "Automatic Case Investigator (ACI) is an on-premise software stack aimed to automate common SOC investigation tasks with AI agents, specifically by performing automated investigations in Security Information and Event Management (SIEM) systems.";
 export const DEFAULT_IMAGE = `${SITE_URL}/assets/social_preview/main.png`;

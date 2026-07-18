@@ -1,8 +1,11 @@
 import { Navbar } from "@/components/ui/Navbar"
 import { landingPageColors as pageColors } from "@/themes/landingPageColors"
+import { usePageMeta } from "@/hooks/usePageMeta"
 import { Box, Heading, Link } from "@chakra-ui/react"
 
 export const NoPage = () => {
+    usePageMeta({ title: "Page Not Found | ACI" });
+
     return (
         <Box color={pageColors.text} minH="100vh">
             <Navbar />

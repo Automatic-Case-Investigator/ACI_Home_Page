@@ -58,6 +58,8 @@ Not every alert deserves a deep dive. A lightweight **triage agent** reads the i
 
 ## Evaluation
 
+*This section summarizes the evaluation. For the full methodology — the dataset preparation pipeline, phase definitions, tool inventory, and reproducibility notes — see the [Benchmark Methodology](/documents/reference/benchmark-methodology) reference doc.*
+
 ### The dataset
 
 To test whether the system recovers a genuinely *multi-step* attack (not just the entry alert), I evaluated it on the **AIT Alert Data Set (AIT-ADS)** [Landauer et al., 2024], built from full multi-phase intrusions inside a realistic enterprise testbed with attack phases labeled as ground truth. I used the **fox** scenario: the agent is given general playbooks for investigating common attack techniques, but never the actual attack chain. It has to find that on its own.

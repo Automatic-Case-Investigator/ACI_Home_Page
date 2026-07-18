@@ -1,0 +1,8 @@
+{
+    "": "Browse the full set below, or use the sidebar to jump straight to a topic.",
+    "docs": "Guides for getting ACI running and connecting it to your SOC stack.",
+    "architecture": "How the agent runtime, orchestrator, and MCP integrations fit together.",
+    "architecture/runtime": "The LangGraph node loop that drives triage and investigation, plus how tasks are queued and streamed.",
+    "reference": "Miscellaneous reference material for ACI.",
+    "blog": "Write-ups on how ACI performs in practice."
+}

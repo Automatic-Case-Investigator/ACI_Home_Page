@@ -4,6 +4,8 @@ import { DocsFolderOverview } from "@/components/ui/DocsFolderOverview";
 import { DocsLayout } from "@/components/ui/DocsLayout";
 import { formatSegment, getImmediateChildren } from "@/components/ui/DocumentTree";
 import visible_documents from "@/data/visible_documents.json"
+import folder_descriptions from "@/data/folder_descriptions.json"
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Heading } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
@@ -16,7 +18,7 @@ export const DocumentPage = () => {
     const resolved = useMemo(() => {
         const exact = visible_documents[documentId as keyof typeof visible_documents];
         if (exact && typeof exact.path === "string") {
-            return { type: "leaf" as const, path: exact.path, title: exact.title };
+            return { type: "leaf" as const, path: exact.path, title: exact.title, description: exact.description };
         }
 
         const prefix = `${documentId}/`;
@@ -28,19 +30,38 @@ export const DocumentPage = () => {
         return { type: "notfound" as const };
     }, [documentId]);
 
+    const folderName = documentId.split("/").filter(Boolean).pop() ?? "Documents";
+    const isBlogPost = documentId.startsWith("blog/");
+
+    usePageMeta({
+        title:
+            resolved.type === "leaf"
+                ? `${resolved.title} | ACI`
+                : resolved.type === "folder"
+                    ? `${formatSegment(folderName)} | ACI Docs`
+                    : "Page Not Found | ACI",
+        description:
+            resolved.type === "leaf"
+                ? resolved.description
+                : resolved.type === "folder"
+                    ? folder_descriptions[documentId as keyof typeof folder_descriptions]
+                    : undefined,
+        path: `/documents/${documentId}`,
+        type: isBlogPost ? "article" : "website",
+    });
+
     if (resolved.type === "notfound") {
         return <NoPage />
     }
 
     if (resolved.type === "folder") {
-        const folderName = documentId.split("/").filter(Boolean).pop() ?? "Documents";
         const children = getImmediateChildren(visible_documents, `${documentId}/`);
 
         return (
             <DocsLayout expandValue={documentId}>
                 <Breadcrumbs documentId={documentId} currentLabel={formatSegment(folderName)} />
                 <Heading mb={6}>{formatSegment(folderName)}</Heading>
-                <DocsFolderOverview>{children}</DocsFolderOverview>
+                <DocsFolderOverview description={folder_descriptions[documentId as keyof typeof folder_descriptions]}>{children}</DocsFolderOverview>
             </DocsLayout>
         )
     }

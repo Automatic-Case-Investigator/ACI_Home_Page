@@ -1,54 +1,72 @@
 {
     "docs/getting-started": {
         "title": "Getting Started",
-        "path": "/docs_src/docs/getting-started.md"
+        "path": "/docs_src/docs/getting-started.md",
+        "description": "Install, configure, and run the ACI platform end to end."
     },
     "docs/connecting-with-soc-tech": {
         "title": "Connecting with SOC Technologies",
-        "path": "/docs_src/docs/connecting-with-soc-tech.md"
+        "path": "/docs_src/docs/connecting-with-soc-tech.md",
+        "description": "Connect ACI to your SIEM, SOAR, and threat-intelligence platforms."
     },
     "reference/configuration": {
         "title": "Configuration",
-        "path": "/docs_src/reference/configuration.md"
+        "path": "/docs_src/reference/configuration.md",
+        "description": "Every .env and runtime configuration option ACI reads at startup."
+    },
+    "reference/benchmark-methodology": {
+        "title": "Benchmark Methodology",
+        "path": "/docs_src/reference/benchmark-methodology.md",
+        "description": "How ACI's multi-step investigation benchmark is designed, run, and scored."
     },
     "architecture/overview": {
         "title": "Overview",
-        "path": "/docs_src/architecture/overview.md"
+        "path": "/docs_src/architecture/overview.md",
+        "description": "How the orchestrator, agents, and MCP tool integrations fit together."
     },
     "architecture/orchestrator": {
         "title": "Orchestrator",
-        "path": "/docs_src/architecture/orchestrator.md"
+        "path": "/docs_src/architecture/orchestrator.md",
+        "description": "The orchestrator agent that reasons before routing alerts and cases to triage or investigation."
     },
     "architecture/workspace": {
         "title": "AVFS Workspace Indexing",
-        "path": "/docs_src/architecture/workspace.md"
+        "path": "/docs_src/architecture/workspace.md",
+        "description": "The durable, per-agent filesystem workspace for case artifacts, evidence, and reports."
     },
     "architecture/tools": {
         "title": "MCP and Tool Policy",
-        "path": "/docs_src/architecture/tools.md"
+        "path": "/docs_src/architecture/tools.md",
+        "description": "The deny-by-default MCP tool surface available to agents, and how access is policed."
     },
     "architecture/automation": {
         "title": "Workflows and Webhooks",
-        "path": "/docs_src/architecture/automation.md"
+        "path": "/docs_src/architecture/automation.md",
+        "description": "The webhooks and workflows that trigger ACI runs on new alerts and cases, without manual kickoff."
     },
     "architecture/findings-board": {
         "title": "Findings Board",
-        "path": "/docs_src/architecture/findings-board.md"
+        "path": "/docs_src/architecture/findings-board.md",
+        "description": "How per-run findings are captured, from model-reported facts to deterministic enrichment."
     },
     "architecture/runtime/agent-graph": {
         "title": "Runtime & Agent Graph",
-        "path": "/docs_src/architecture/runtime/agent-graph.md"
+        "path": "/docs_src/architecture/runtime/agent-graph.md",
+        "description": "The LangGraph node loop that drives triage and investigation."
     },
     "architecture/runtime/prompts": {
         "title": "Prompt Composition",
-        "path": "/docs_src/architecture/runtime/prompts.md"
+        "path": "/docs_src/architecture/runtime/prompts.md",
+        "description": "How ACI layers platform, agent, and task context into the prompts each agent runs on."
     },
     "architecture/runtime/queue-and-streaming": {
         "title": "Queue Semantics & Model Streaming",
-        "path": "/docs_src/architecture/runtime/queue-and-streaming.md"
+        "path": "/docs_src/architecture/runtime/queue-and-streaming.md",
+        "description": "How investigation tasks are queued and claimed, and how model output is streamed."
     },
     "blog/performing-multi-step-attack-analysis-with-agentic-ai": {
         "title": "Performing Multi-Step Attack Analysis with Agentic AI",
-        "path": "/docs_src/blog/performing-multi-step-attack-analysis-with-agentic-ai.md"
+        "path": "/docs_src/blog/performing-multi-step-attack-analysis-with-agentic-ai.md",
+        "description": "Starting from a single low-severity alert, an ACI agent reconstructed a full attack chain on its own — no one pointed it there. Here's how the task queue, evidence tracking, and evaluation work."
     }
 }

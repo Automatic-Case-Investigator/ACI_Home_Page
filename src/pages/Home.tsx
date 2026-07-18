@@ -2,6 +2,7 @@ import { Box, Button, Flex, Grid, GridItem, Heading, HStack, Image, SimpleGrid, 
 import { Navbar } from "@/components/ui/Navbar"
 import { Footer } from "@/components/ui/Footer"
 import { landingPageColors as pageColors } from "@/themes/landingPageColors"
+import { usePageMeta } from "@/hooks/usePageMeta"
 
 const problemPoints = [
     "Most AI SOC tools optimize for speed across the entire alert lifecycle, trading investigation depth for triage throughput.",
@@ -46,6 +47,8 @@ const proofItems = [
 ]
 
 export const Home = () => {
+    usePageMeta({ title: "ACI - Your SIEM AI SOC analyst", path: "/" });
+
     return (
         <Box color={pageColors.text} overflow="hidden" display="flex" flexDirection="column" minH="100vh">
             <Navbar />

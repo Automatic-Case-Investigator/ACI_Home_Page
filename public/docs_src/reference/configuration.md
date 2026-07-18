@@ -99,5 +99,5 @@ changes.
 > **API Base URL** (e.g. `http://thehive:9000`). Connections saved under the old schema keep
 > working — the URL is derived from the stored host/port until you next save.
 
-See [Getting Started](../guides/getting-started.md#5-configure-connections-in-the-dashboard)
+See [Getting Started](/documents/docs/getting-started#5-configure-connections-in-the-dashboard)
 for the setup walkthrough.

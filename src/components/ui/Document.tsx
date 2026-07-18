@@ -6,34 +6,38 @@ import { Highlight, themes } from "prism-react-renderer"
 import Markdown, { Components } from "react-markdown";
 import { useEffect, useState } from "react";
 import rehypeRaw from 'rehype-raw'
+import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
+
+// Offsets an anchored heading below the fixed navbar so scrollIntoView doesn't hide it underneath.
+const ANCHOR_SCROLL_MARGIN = "100px";
 
 export const Document = ({ documentPath }: { documentPath: string }) => {
     const [blogContent, setBlogContent] = useState<string>("");
 
     const components = {
-        h1: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="3xl" fontWeight="bold" mt={8} mb={8}>
+        h1: ({ id, children }: { id?: string; children: React.ReactNode }) => (
+            <Heading id={id} scrollMarginTop={ANCHOR_SCROLL_MARGIN} fontSize="3xl" fontWeight="bold" mt={8} mb={8}>
                 {children}
             </Heading>
         ),
-        h2: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="2xl" fontWeight="bold" mt={6} mb={6}>
+        h2: ({ id, children }: { id?: string; children: React.ReactNode }) => (
+            <Heading id={id} scrollMarginTop={ANCHOR_SCROLL_MARGIN} fontSize="2xl" fontWeight="bold" mt={6} mb={6}>
                 {children}
             </Heading>
         ),
-        h3: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="xl" fontWeight="bold" mt={4} mb={4}>
+        h3: ({ id, children }: { id?: string; children: React.ReactNode }) => (
+            <Heading id={id} scrollMarginTop={ANCHOR_SCROLL_MARGIN} fontSize="xl" fontWeight="bold" mt={4} mb={4}>
                 {children}
             </Heading>
         ),
-        h4: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="large" fontWeight="bold" mt={2} mb={2}>
+        h4: ({ id, children }: { id?: string; children: React.ReactNode }) => (
+            <Heading id={id} scrollMarginTop={ANCHOR_SCROLL_MARGIN} fontSize="large" fontWeight="bold" mt={2} mb={2}>
                 {children}
             </Heading>
         ),
-        h5: ({ children }: { children: React.ReactNode }) => (
-            <Heading fontSize="medium" fontWeight="bold" mt={1} mb={1}>
+        h5: ({ id, children }: { id?: string; children: React.ReactNode }) => (
+            <Heading id={id} scrollMarginTop={ANCHOR_SCROLL_MARGIN} fontSize="medium" fontWeight="bold" mt={1} mb={1}>
                 {children}
             </Heading>
         ),
@@ -138,8 +142,10 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             <List.Item ml={4} mb={2}>{children}</List.Item>
         ),
 
-        details: ({ children }: { children: React.ReactNode }) => (
+        details: ({ id, children }: { id?: string; children: React.ReactNode }) => (
             <Box
+                id={id}
+                scrollMarginTop={ANCHOR_SCROLL_MARGIN}
                 as="details"
                 mb={4}
                 borderRadius="12px"
@@ -182,9 +188,27 @@ export const Document = ({ documentPath }: { documentPath: string }) => {
             .catch((err) => console.error(err));
     }, [documentPath]);
 
+    // Content loads asynchronously, so the browser's own initial anchor-scroll (which
+    // runs before this fetch resolves) misses the target. Scroll to it manually once
+    // the heading/anchor ids exist in the DOM. Mermaid diagrams and images render in
+    // afterward and can shift the layout, so re-scroll once more after they settle.
+    useEffect(() => {
+        if (!blogContent) return;
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+
+        const scrollToHash = () => {
+            document.getElementById(decodeURIComponent(hash))?.scrollIntoView({ block: "start", behavior: "instant" as ScrollBehavior });
+        };
+
+        scrollToHash();
+        const retries = [100, 300, 600, 1000].map((delay) => setTimeout(scrollToHash, delay));
+        return () => retries.forEach(clearTimeout);
+    }, [blogContent]);
+
     return (
         <Box>
-            <Markdown components={components as Components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+            <Markdown components={components as Components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSlug]}>
                 {blogContent}
             </Markdown>
         </Box>

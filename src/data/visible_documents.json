@@ -1,7 +1,11 @@
 {
-    "docs/get_started": {
-        "title": "Get Started",
-        "path": "/docs_src/docs/get_started.md"
+    "docs/getting-started": {
+        "title": "Getting Started",
+        "path": "/docs_src/docs/getting-started.md"
+    },
+    "docs/connecting-with-soc-tech": {
+        "title": "Connecting with SOC Technologies",
+        "path": "/docs_src/docs/connecting-with-soc-tech.md"
     },
     "reference/configuration": {
         "title": "Configuration",
@@ -43,8 +47,8 @@
         "title": "Queue Semantics & Model Streaming",
         "path": "/docs_src/architecture/runtime/queue-and-streaming.md"
     },
-    "blog/performing_multi_step_attack_analysis_with_agentic_ai": {
+    "blog/performing-multi-step-attack-analysis-with-agentic-ai": {
         "title": "Performing Multi-Step Attack Analysis with Agentic AI",
-        "path": "/docs_src/blog/performing_multi_step_attack_analysis_with_agentic_ai.md"
+        "path": "/docs_src/blog/performing-multi-step-attack-analysis-with-agentic-ai.md"
     }
 }

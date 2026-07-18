@@ -78,10 +78,10 @@ export const Home = () => {
 
                                 <HStack gap={4} flexWrap="wrap">
                                     <Button asChild size="lg" bg={pageColors.cta} color={pageColors.background} _hover={{ bg: pageColors.ctaHover }}>
-                                        <a href="/documents/docs/get_started">Get Started</a>
+                                        <a href="/documents/docs/getting-started">Get Started</a>
                                     </Button>
                                     <Button asChild size="lg" variant="outline" borderColor={pageColors.borderButton} color={pageColors.text} _hover={{ bg: pageColors.surfaceHover }}>
-                                        <a href="/documents/blog/performing_multi_step_attack_analysis_with_agentic_ai">See How It Works</a>
+                                        <a href="/documents/blog/performing-multi-step-attack-analysis-with-agentic-ai">See How It Works</a>
                                     </Button>
                                 </HStack>
 

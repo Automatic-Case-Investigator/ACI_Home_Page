@@ -11,7 +11,7 @@ export const Navbar = () => {
     }
 
     const navbarItems: MenuLink[] = [
-        { label: "Get Started", to: "/documents/docs/get_started" },
+        { label: "Get Started", to: "/documents/docs/getting-started" },
         { label: "Docs", to: "/documents/docs" },
         { label: "Architecture", to: "/documents/architecture" },
         { label: "Blog", to: "/documents/blog" }

@@ -20,7 +20,7 @@ setup mistake:
 - **Dashboard → Settings** — the model provider and the Wazuh/TheHive/VirusTotal
   connections, stored in the database (step 5). These are **not** in `.env`.
 
-See the [Configuration Reference](../reference/configuration.md) for every setting.
+See the [Configuration Reference](/documents/reference/configuration) for every setting.
 
 ## 1. Install dependencies
 
@@ -99,7 +99,7 @@ In the dashboard, open **Settings -> Integrations** and configure integration wi
 - **SOAR** — Host, Port, Authentication credentials, Verify TLS.
 - **TI (Optional)** — API key (optional; enables artifact enrichment).
 
-<!-- For more information about integrating SOC technologies, see [this](/documents/docs/connecting_with_soc_tech) -->
+<!-- For more information about integrating SOC technologies, see [this](/documents/docs/connecting-with-soc-tech) -->
 
 ## 6. Run an investigation
 

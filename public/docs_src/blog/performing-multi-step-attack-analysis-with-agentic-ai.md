@@ -287,7 +287,7 @@ For each entry point I measured:
 
 ### Results
 
-The encouraging result wasn't perfect recall. It was that the agent regularly uncovered attack phases nobody pointed it toward. Starting from the wpscan alert, it reconstructed an average of 4.7 of 8 scored phases; starting from the harder, more isolated privilege-escalation alert, about 2 of 8. Every one of the six runs reached the correct verdict.
+The encouraging result wasn't perfect recall. It was that the agent regularly uncovered attack phases nobody pointed it toward. Here's what that looked like across the six runs, before getting into what the numbers actually support.
 
 The table below is the **per-phase hit rate** (how many of the 3 trials reached each phase), for the 8 scorable phases:
 
@@ -309,7 +309,35 @@ The table below is the **per-phase hit rate** (how many of the 3 trials reached 
 | Model calls / run (avg) | ≈ 359 | ≈ 97 |
 | Input tokens / run (avg) | ≈ 13.3 M | ≈ 2.5 M |
 
-Because we only ran six trials, raw percentages are misleading. "100% verdict accuracy" from 3/3 trials and from 3,000/3,000 trials would both round to the same number, but they represent very different evidence. Instead of quoting raw hit-rates, I estimated posterior uncertainty with a Beta-Binomial model: starting from a uniform prior and updating on observed successes and failures. The headline numbers: verdict accuracy is almost certainly above 70% (91.8% posterior probability); the five most consistently-detected phases are each individually unlikely to be flukes (93.75% posterior probability); and the recon entry (57.7% mean recall) clearly outperforms the privilege-escalation entry (26.9%), though six runs is not enough to pin down exactly how large that gap is. The full derivation (worked by hand, no software required) is in the appendix if you want to check the math.
+Six runs isn't enough to take those percentages at face value. "100%
+verdict accuracy" from 3/3 trials and from 3,000/3,000 trials round to the
+same number, but they're very different evidence — so instead of quoting
+raw hit-rates, I estimated posterior uncertainty with a Beta-Binomial
+model, applied at whatever level of granularity the data actually
+supports. (The full derivation — including why some claims get pooled
+together and others don't — is in the appendix below.)
+
+Three things came out of that:
+
+- **Verdict accuracy is almost certainly above 70% in both entry points.**
+  Recon and privesc are kept separate here rather than pooled — they
+  exercise different reasoning paths (forward from an early alert vs.
+  backward from a late one), and nothing in 3 trials each is enough to
+  justify assuming they share one true rate. Each hit 3/3, giving an
+  identical posterior for both: 80% mean, 76% posterior probability of
+  exceeding 70%.
+- **Both entry points have a reliable core.** Recon always landed
+  `service_scans`, `wpscan`, and `privilege_escalation`; privesc always
+  landed `reverse_shell` and `privilege_escalation`. Each core hit in every
+  one of its 3 trials — 93.75% posterior probability apiece of a true rate
+  above 50%, so these aren't flukes.
+- **Beyond that core, the two entry points diverge.** Recon showed genuine
+  variability across three more phases — `dirb` (2/3), `reverse_shell`
+  (2/3), `service_stop` (1/3) — reported individually rather than pooled
+  into one rate, since there's no more reason to treat these three as
+  interchangeable than there was for the core. Privesc showed no
+  variability at all: the same two phases hit and the same six missed,
+  every single trial, a fixed pattern rather than a noisy rate.
 
 <details>
 <summary>Appendix: the Bayesian statistics, worked out</summary>
@@ -318,31 +346,41 @@ Because we only ran six trials, raw percentages are misleading. "100% verdict ac
 
 **The idea, in short.** Start from a *prior* belief (here, a uniform prior): every success rate from 0% to 100% is equally plausible before any data comes in. Each trial updates that belief: a success shifts it up, a failure shifts it down, and the more trials observed, the more the estimate sharpens. What's left is a *posterior* distribution over the true rate, from which we read off a posterior mean (the best-guess rate) and a 95% credible interval (a range likely to contain the true rate).
 
-**The Beta-Binomial update.** Every experiment here is a series of pass/fail outcomes, so the math is the standard Beta-Binomial model. The uniform prior is `Beta(1, 1)`. After observing `s` successes and `f` failures, the posterior is simply
+**The Beta-Binomial update.** Every quantity below is a series of pass/fail outcomes, so the math is the standard Beta-Binomial model. The uniform prior is `Beta(1, 1)`. After observing `s` successes and `f` failures, the posterior is simply
 
 ```
 Beta(1 + s, 1 + f)
 ```
 
-No simulation or numerical fitting. Just add the observed counts to the prior. From the posterior, the mean is `α / (α + β)`, and the 95% credible interval is the middle 95% of that distribution.
+No simulation or numerical fitting. Just add the observed counts to the prior. From the posterior, the mean is `α / (α + β)`, and the 95% credible interval is the middle 95% of that distribution — closed-form when β = 1, since a `Beta(α, 1)` posterior has CDF `x^α`, giving `P(true rate > x) = 1 − x^α`; otherwise read numerically off the distribution.
 
-**Worked examples.** Every statistic reported earlier follows exactly this rule. Two of the four can be checked by hand, because a `Beta(α, 1)` posterior has a closed form: its CDF is `x^α`, so `P(true rate > x) = 1 − x^α`.
+**What counts as one independent trial.** This model is only valid if the pooled outcomes are independent draws from one shared true rate, so each quantity below is defined at the level where that's actually plausible:
 
-- *Verdict accuracy:* 6 successes, 0 failures across all six runs → `Beta(1+6, 1+0) = Beta(7, 1)`. Mean = 7/8 = 87.5%. `P(true rate > 70%) = 1 − 0.7^7 = 1 − 0.0824 = 91.8%`. This is the figure quoted above, reproduced by hand with one exponentiation.
-- *A phase detected in all three trials:* 3 successes, 0 failures → `Beta(1+3, 1+0) = Beta(4, 1)`. Mean = 4/5 = 80%. `P(true rate > 50%) = 1 − 0.5^4 = 1 − 0.0625 = 93.75%`.
-- *Overall recall, recon entry:* 14 hits out of 24 phase-attempts (8 phases × 3 trials), 10 misses → `Beta(1+14, 1+10) = Beta(15, 11)`. Mean = 15/26 = 57.7%. Both parameters exceed 1 here, so the credible interval (38%–76%) is read off the distribution numerically rather than by hand.
-- *Overall recall, privilege-escalation entry:* 6 hits out of 24, 18 misses → `Beta(1+6, 1+18) = Beta(7, 19)`. Mean = 7/26 = 26.9%, credible interval 13%–45%.
+- **Verdict accuracy** is reported separately per entry point rather than pooled. Recon and privesc exercise different reasoning paths, so pooling them would assume they share one true rate — and with only 3 trials each, there's no way to test that assumption. Both hitting 3/3 isn't evidence they're the same process; it's just too little data to show a difference even if one exists.
+- **Consistency claims** are defined as one composite outcome per run — "did this run land the whole reliable cluster together" — rather than as several per-phase probabilities multiplied together. Within a run, phases are not independent of each other: whether one phase gets recovered and whether another does are linked by some shared "how well is this particular run going" factor, so multiplying separate per-phase posteriors (which requires independence) isn't valid here. Defining the cluster as a single outcome sidesteps the question entirely — there's no combining of separate probabilities, just one direct count of how often the compound event happened. The one place multiplication *is* valid is combining the two entry points' clusters with each other, since those come from entirely disjoint runs — no single trial belongs to both entry points, so independence across them is a reasonable assumption even though independence within one of them isn't.
+- **Recall** is reported per phase, not pooled into one rate — even among the phases that showed real trial-to-trial variation. The same argument that applies to the reliable core applies here too: phases within a run aren't independent of each other, so treating `dirb`, `reverse_shell`, and `service_stop` as exchangeable draws from one shared rate would repeat the same mistake in a milder form. A phase reached in 0 or 3 of 3 trials has, additionally, no observed variance at all — the honest statement there is that no between-run variation was observed, not that the true rate is 0% or 100%.
 
-**A note on independence.** The 72% figure above combines five per-phase probabilities: `0.9375^5 ≈ 72%`. That multiplication is only valid if the five phase detections are statistically independent; this is an assumption, not a fact. In practice, phases recovered in the same run tend to be positively correlated (a run that goes well tends to surface several phases together), so the true joint probability is likely somewhat lower than 72%. The same caveat applies to the overall-recall posteriors: they treat each phase outcome as an independent draw, a useful approximation for summarizing performance but not a fully specified probabilistic model.
+**Worked examples.**
+
+- *Verdict accuracy, each entry point:* 3 successes, 0 failures → `Beta(1+3, 1+0) = Beta(4, 1)`. Mean = 4/5 = 80%. `P(true rate > 70%) = 1 − 0.7^4 = 76.0%`. Recon and privesc give identical numbers because both hit 3/3, not because they were pooled — they're two separate posteriors that happen to agree.
+- *Recon's reliable core* (`service_scans` ∧ `wpscan` ∧ `privilege_escalation`, all in the same run): landed together in all 3 trials → `Beta(1+3, 1+0) = Beta(4, 1)`. Mean = 4/5 = 80%. `P(true rate > 50%) = 1 − 0.5^4 = 93.75%`. 95% credible interval: 40%–99%.
+- *Privesc's reliable core* (`reverse_shell` ∧ `privilege_escalation`): landed together in all 3 trials → `Beta(4, 1)`, identical to the above: mean 80%, `P(true rate > 50%) = 93.75%`, interval 40%–99%.
+- *Both cores together:* these two composite events come from disjoint runs, so multiplying them is valid: `0.9375 × 0.9375 ≈ 87.9%` — the posterior probability that both entry points' reliable cores are genuine (each individually above a 50% true rate), not a coincidence of small samples.
+- *Recon's variable phases* (`dirb`, `reverse_shell`, `service_stop`): each gets its own count rather than a pooled rate, for the same reason the reliable core is a composite instead of a product — these three aren't independent of each other within a run, and there's no basis for assuming they behave the same way. The raw per-trial counts are in the results table above (2/3, 2/3, 1/3); no further modeling is applied to them.
+- *Privesc's remaining six phases* (everything except its reliable core): 0 hits out of 9 attempts, every trial — no between-run variation was observed. That's reported as exactly that observation, not as a claim that the true rate is 0%: three trials can't rule out the phase occasionally succeeding, they just didn't see it happen.
 
 | Quantity | Data | Posterior | Mean | 95% credible interval |
 |---|---|---|---|---|
-| Verdict accuracy | 6 / 6 | Beta(7, 1) | 87.5% | 59%–100% |
-| Consistently detected phase | 3 / 3 | Beta(4, 1) | 80.0% | 40%–99% |
-| Overall recall (recon) | 14 / 24 | Beta(15, 11) | 57.7% | 38%–76% |
-| Overall recall (privilege escalation) | 6 / 24 | Beta(7, 19) | 26.9% | 13%–45% |
+| Verdict accuracy (recon) | 3 / 3 | Beta(4, 1) | 80.0% | 40%–99% |
+| Verdict accuracy (privesc) | 3 / 3 | Beta(4, 1) | 80.0% | 40%–99% |
+| Recon reliable core (composite) | 3 / 3 | Beta(4, 1) | 80.0% | 40%–99% |
+| Privesc reliable core (composite) | 3 / 3 | Beta(4, 1) | 80.0% | 40%–99% |
 
-One caveat travels with the verdict-accuracy figure specifically: every case here was a genuine attack, so it measures whether the agent dismisses real attacks (it didn't), not whether it can tell an attack from noise. And the recon/privilege-escalation credible intervals overlap slightly (38–45%), so while the recall gap is likely real, a larger sample would be needed to pin down its exact size.
+Recon's variable phases (`dirb`, `reverse_shell`, `service_stop`) aren't in this table — they're reported as raw per-trial counts in the main results table, not as a modeled rate, for the reasons above.
+
+The smallest remaining assumption, even here, is that the 3 trials per entry point are themselves independent, identically-distributed replicates within that one entry point — reasonable, since each is a fresh execution with independent model sampling, but there are only 3 of them, so every interval above should be read as wide-open rather than precise. That independence claim is also narrower than it might sound: it says the six runs are consistent stochastic executions of this one system, under this one model, this one prompt set, this one dataset — not that they're a representative sample of investigations in general.
+
+One caveat travels with both verdict-accuracy figures specifically: every case here was a genuine attack, so they measure whether the agent dismisses real attacks (it didn't), not whether it can tell an attack from noise.
 
 </details>
 
@@ -350,7 +388,7 @@ A few takeaways from the runs. First what went well, then where it fell short:
 
 **What went well**
 
-- **It uncovers attack phases beyond the entrypoint.** Across these runs it consistently reached phases past the one it started from. The five most consistently-detected phases each carry a 93.75% posterior probability of exceeding a 50% detection rate, so those hits are unlikely to be flukes. That said, the two entry points differ substantially in overall recall (57.7% vs 26.9%). This gap is explored below and in Limitations.
+- **It uncovers attack phases beyond the entrypoint.** Both reliable cores above sit past the entry alert itself, so those hits are unlikely to be flukes rather than genuine reach. What's more interesting is what happens once a run gets past its core — recon keeps exploring and sometimes succeeds further; privesc simply stops. That gap is explored below and in Limitations.
 - **It reached the right verdict in every run.** It classified each entry-point alert as a true positive. This is correct, since every entry point is part of a larger attack chain. That is a genuine strength but an easy test: the set held no benign cases, so it shows the agent doesn't wave off a real attack, not that it can rule one out (see Limitations).
 - **It investigates past the alert it's handed.** Rather than describing only the
   event that triggered it, the agent consistently treated each finding as a lead and
@@ -364,7 +402,7 @@ A few takeaways from the runs. First what went well, then where it fell short:
 
 **What can be improved**
 
-- **It reasons forwards better than backwards.** The recon entry recovered a mean 57.7% of phases vs 26.9% for the privilege-escalation entry, a gap that shows up in the per-phase table as well: the recon entry hit 5 of 8 phases at least twice, while the privilege-escalation entry hit only 2. The most likely explanation is proximity: from the wpscan alert, the adjacent attack phases (service scans, dirb, reverse shell) leave large volumes of web events that are easy to query. From the privilege-escalation alert, the earlier phases are temporally and causally distant, so the agent tends to focus on host-side movements instead of tracing back through the kill chain. To mitigate this, further tuning of the playbooks is necessary.
+- **It reasons forwards better than backwards.** The recon-vs-privesc gap above is starker than a recall percentage alone suggests: recon is exploring past its core and sometimes succeeding; privesc is executing one fixed, narrow pattern regardless of run, never venturing beyond `reverse_shell` and `privilege_escalation`. The most likely explanation is proximity: from the wpscan alert, the adjacent attack phases (service scans, dirb, reverse shell) leave large volumes of web events that are easy to query. From the privilege-escalation alert, the earlier phases are temporally and causally distant, so the agent tends to focus on host-side movements instead of tracing back through the kill chain. To mitigate this, further tuning of the playbooks is necessary.
 - **Thoroughness is uneven and costly.** The recon entry averaged ~359 model calls and ~13.3 M input tokens per run, several times more than the privilege-escalation entry (~97 calls, ~2.5 M tokens). The extra work stems from the recon entry's web-heavy context: the agent must sift through large volumes of benign IDS and scan noise before it can confirm that any individual event is meaningful, which drives repeated query refinement cycles.
 
 > Two phases in the fox dataset (a raw network SYN sweep and a no-tunneling
@@ -375,7 +413,7 @@ A few takeaways from the runs. First what went well, then where it fell short:
 
 These results are a first look, not a benchmark. A few things bound how far they should be read:
 
-- **Small sample.** Three trials per entry point (six runs total) is enough to check whether behavior is roughly consistent, not to establish rates. The credible intervals say as much: overall recall spans 38–76% from the recon entry and 13–45% from the privilege-escalation entry. The point estimates should be read together with those intervals, not on their own.
+- **Small sample.** Three trials per entry point (six runs total) is enough to check whether behavior is roughly consistent, not to establish rates. Recon's variable phases (`dirb`, `reverse_shell`, `service_stop`) each have only 2–3 observations — not enough to say anything beyond the raw counts already reported, which is why they aren't pooled into a combined rate. Privesc's phases showed no variation at all across 3 trials, which cuts the other way: it's consistent with either a genuinely fixed pattern or simply not enough trials to see it break, and 3 runs can't distinguish those two possibilities.
 - **One scenario, no replication.** Everything here is the fox scenario. Whether the same design holds on the other AIT-ADS attacks (with different phase structures, log mixes, and entry points) is untested, so nothing here should be taken to generalize beyond fox until that replication exists.
 - **Verdict accuracy has nothing to fail on.** Both entry points are real parts of a real intrusion, so a "true positive, critical" call is correct every time but never at risk of being wrong. With no benign cases in the set, the 100% figure reflects whether the agent dismisses genuine attacks (it doesn't), not whether it can separate an attack from noise. The false-positive side is simply untested here.
 - **One model, one configuration.** Every run used a single model at a single reasoning effort. A different model or budget could shift both recall and cost.
